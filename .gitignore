@@ -1,0 +1,75 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+.installed.cfg
+dist/
+build/
+*.egg
+MANIFEST
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Testing
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+*.cover
+
+# Training outputs
+checkpoints/
+outputs/
+wandb/
+swanlog/
+*.log
+
+# Environment
+.env
+.envrc
+.venv
+env/
+venv/
+
+# Large files (should be hosted on Hugging Face)
+*.pdf
+*.bin
+*.safetensors
+*.pt
+*.pth
+*.ckpt
+
+# Data (full datasets should be hosted separately)
+# Only example data (10% samples in data_AutoBM_sample/) are tracked
+data_example/data_AutoBM/
+
+# Claude Code
+.claude/
+
+# Temporary files
+*.tmp
+*.bak
+/tmp/
+
+# Type checkers
+.mypy_cache/
+.pytype/
+.pyre/

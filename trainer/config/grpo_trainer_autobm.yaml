@@ -1,0 +1,92 @@
+# =============================================================
+# GRPO (SPC-GRPO) Training Config for AutoBM Task
+# Model: Seed-Coder-8B-Reasoning-SFT (after Stage I SFT)
+# Hardware: 8 GPUs, single node
+# Reward: MGHR (Multi-Granularity Hybrid Reward)
+# =============================================================
+# Usage:
+#   python -m verl.trainer.main_ppo \
+#     --config-path ./trainer/config \
+#     --config-name grpo_trainer_autobm \
+#     trainer.n_gpus_per_node=8 trainer.nnodes=1
+# =============================================================
+
+defaults:
+  - actor@actor_rollout_ref.actor: dp_actor
+  - data@data: legacy_data
+  - ref@actor_rollout_ref.ref: dp_ref
+  - rollout@actor_rollout_ref.rollout: rollout
+  - model@actor_rollout_ref.model: hf_model
+  - critic@critic: dp_critic
+  - reward_model@reward_model: dp_reward_model
+  - algorithm@algorithm.rollout_correction: rollout_correction
+  - _self_
+
+# Override data paths for AutoBM
+data:
+  # -- Point these to your RL training parquet files --
+  train_files: ./data_example/data_AutoBM_sample/Data_RL/train.parquet
+  val_files: ./data_example/data_AutoBM_sample/Data_RL/test.parquet
+
+# Override model path
+actor_rollout_ref:
+  hybrid_engine: true
+  nccl_timeout: 600
+  model:
+    # -- Replace with path to your SFT checkpoint --
+    path: Seed-Coder-8B-Reasoning-SFT
+  rollout:
+    layered_summon: False
+
+# MGHR reward function
+custom_reward_function:
+  path: trainer/config/reward/MGHR/code_reward_func.py
+  name: compute_score
+
+# SPC-GRPO algorithm config
+algorithm:
+  _target_: verl.trainer.config.AlgoConfig
+  gamma: 1.0
+  lam: 1.0
+  adv_estimator: grpo
+  norm_adv_by_std_in_grpo: True
+  use_kl_in_reward: False
+  kl_penalty: kl
+  kl_ctrl:
+    _target_: verl.trainer.config.KLControlConfig
+    type: fixed
+    kl_coef: 0.001
+    horizon: 10000
+    target_kl: 0.1
+  use_pf_ppo: False
+  pf_ppo:
+    reweight_method: pow
+    weight_pow: 2.0
+
+trainer:
+  balance_batch: True
+  total_epochs: 30
+  total_training_steps: null
+  project_name: AutoBM-GRPO
+  experiment_name: seedcoder8b-spc-grpo
+  logger: ["console", "swanlab"]
+  log_val_generations: 0
+  rollout_data_dir: null
+  validation_data_dir: null
+  nnodes: 1
+  n_gpus_per_node: 8
+  save_freq: -1
+  resume_mode: auto
+  resume_from_path: null
+  val_before_train: True
+  val_only: False
+  test_freq: -1
+  critic_warmup: 0
+  default_hdfs_dir: null
+  del_local_ckpt_after_load: False
+  default_local_dir: checkpoints/${trainer.project_name}/${trainer.experiment_name}
+  max_actor_ckpt_to_keep: 3
+  max_critic_ckpt_to_keep: 3
+  ray_wait_register_center_timeout: 300
+  device: cuda
+  use_legacy_worker_impl: auto
