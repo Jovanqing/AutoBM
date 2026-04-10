@@ -3,7 +3,8 @@
 <p align="center">
   <a href="https://arxiv.org/abs/2602.07083"><img src="https://img.shields.io/badge/arXiv-2602.07083-b31b1b.svg" alt="arXiv"></a>
   <a href="https://github.com/Jovanqing/AutoBM/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License"></a>
-  <a href="https://huggingface.co/Jovanqing/Seed-Coder-8B-Reasoning-SFT"><img src="https://img.shields.io/badge/HuggingFace-Model-yellow.svg" alt="Model"></a>
+  <a href="https://huggingface.co/yongqiqng/AutoBM-Seed-Coder-8B-R"><img src="https://img.shields.io/badge/HuggingFace-Model-yellow.svg" alt="Model"></a>
+  <a href="https://huggingface.co/datasets/yongqiqng/CivilInstruct-Sample"><img src="https://img.shields.io/badge/HuggingFace-Dataset-orange.svg" alt="Dataset"></a>
 </p>
 
 Official implementation of the paper:
@@ -240,7 +241,19 @@ For successful executions, physical consistency is evaluated by the relative err
 
 | Model | Base | Training | HuggingFace |
 |-------|------|----------|-------------|
-| Seed-Coder-8B-Reasoning-SFT | Seed-Coder-8B-R | Stage I (SFT) + Stage II (SPC-GRPO) | [Download](https://huggingface.co/Jovanqing/Seed-Coder-8B-Reasoning-SFT) |
+| AutoBM-Seed-Coder-8B-R | Seed-Coder-8B-Reasoning | Stage I (SFT) + Stage II (SPC-GRPO) | [Download](https://huggingface.co/yongqiqng/AutoBM-Seed-Coder-8B-R) |
+
+```python
+from transformers import AutoModelForCausalLM, AutoTokenizer
+import torch
+
+tokenizer = AutoTokenizer.from_pretrained("yongqiqng/AutoBM-Seed-Coder-8B-R")
+model = AutoModelForCausalLM.from_pretrained(
+    "yongqiqng/AutoBM-Seed-Coder-8B-R",
+    torch_dtype=torch.bfloat16,
+    device_map="auto",
+)
+```
 
 ### BMEval Results
 
