@@ -109,9 +109,23 @@ pip install openseespy
 
 ## Data
 
-### Example Data (included in this repo)
+### Sample Data on Hugging Face
 
-This repository includes **10% samples** of each dataset partition for demonstration purposes. The example data is located in `data_example/data_AutoBM_sample/`.
+A 10% sample of each dataset partition is publicly available on Hugging Face for demonstration and reproducibility:
+
+**[yongqiqng/CivilInstruct-Sample](https://huggingface.co/datasets/yongqiqng/CivilInstruct-Sample)**
+
+```python
+from datasets import load_dataset
+
+# SFT (Stage I) data
+sft_train = load_dataset("yongqiqng/CivilInstruct-Sample", "sft", split="train")
+
+# RL (Stage II) data
+rl_train = load_dataset("yongqiqng/CivilInstruct-Sample", "rl", split="train")
+```
+
+The same sample files are also included in this repository under `data_example/data_AutoBM_sample/`.
 
 ### Full Dataset
 
@@ -124,7 +138,7 @@ The complete CivilInstruct dataset comprises four parts:
 | Part 3 | Execution error-oriented debugging CoT data | 3,500 |
 | Part 4 | Physics-informed expert data (with ground-truth periods) | 512 |
 
-The full dataset is available at: [Hugging Face Datasets](https://huggingface.co/datasets/Jovanqing/CivilInstruct) *(coming soon)*
+The full dataset will be released upon paper publication.
 
 ### Data Format
 
